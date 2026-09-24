@@ -50,7 +50,8 @@ To restore complete structural database integrity, the following programmatic Ex
 ### A. Normalizing Text Casing and Trimming Spaces
 *   **Problem:** Erratic case entries and hidden text padding spaces generated fragmented categorical splits.
 *   **Solution:** Unified text casing and stripped out invisible trailing space breaks simultaneously using nested string configurations:
-   =PROPER(TRIM(A2))
+
+ =PROPER(TRIM(A2))
 
 ### B. Patching Blank Product Mappings
 *   **Problem:** Missing product identifier keys threatened to drop transactional entries out of the model entirely.
