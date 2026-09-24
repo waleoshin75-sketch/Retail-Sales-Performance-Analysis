@@ -50,16 +50,12 @@ To restore complete structural database integrity, the following programmatic Ex
 ### A. Normalizing Text Casing and Trimming Spaces
 *   **Problem:** Erratic case entries and hidden text padding spaces generated fragmented categorical splits.
 *   **Solution:** Unified text casing and stripped out invisible trailing space breaks simultaneously using nested string configurations:
-    ```
-    =PROPER(TRIM(A2))
-    ```
+   
 
 ### B. Patching Blank Product Mappings
 *   **Problem:** Missing product identifier keys threatened to drop transactional entries out of the model entirely.
 *   **Solution:** Built a conditional logic formula to isolate blank cells and assign them to a structured placeholder flag:
-    ```
-    =IF(ISBLANK(B2), "UNKNOWN_PROD", B2)
-    ```
+    
 
 ### C. Eliminating Duplicate Records
 *   **Problem:** Repeated primary identifier records broke the unique constraints required for database lookups.
