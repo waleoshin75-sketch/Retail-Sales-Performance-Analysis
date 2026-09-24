@@ -84,7 +84,7 @@ A 1-to-Many (`1:*`) active data relationship map was established, drawing connec
 ### B. Cross-Table Advanced DAX Calculation
 To calculate our true monetary yields on a dynamic, row-by-row transactional matrix level, I authored a cross-table **DAX Measure** inside the model:
 
-Total Revenue := SUMX(Sales_Fact, Sales_Fact[Qty_Order] * RELATED(Production_Dim[Unit price]))`
+Total Revenue := SUMX(Sales_Fact, Sales_Fact[Qty_Order] * RELATED(Product_Dim[Unit price]))`
 
 *   *Why this works:* `SUMX` forces an iterative, row-by-row transaction calculation, while `RELATED` pulls the unit catalog pricing from the dimension table instantly for each matching item ID.
 
