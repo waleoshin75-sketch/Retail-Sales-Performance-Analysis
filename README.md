@@ -80,6 +80,9 @@ A 1-to-Many (`1:*`) active data relationship map was established, drawing connec
 *   `Production_Dim[ProductID]` Connected to `Sales_Fact[ProductID]`
 *   `Stores_Dim[StoreID]` Connected to `Sales_Fact[StoreID]`
 
+*   <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/780dc13f-ff5d-48db-b7da-d40379b158a5" />
+
+
 ### B. Cross-Table Advanced DAX Calculation
 To calculate our true monetary yields on a dynamic, row-by-row transactional matrix level, I authored a cross-table **DAX Measure** inside the model:
 ```dax
