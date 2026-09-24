@@ -55,7 +55,8 @@ To restore complete structural database integrity, the following programmatic Ex
 ### B. Patching Blank Product Mappings
 *   **Problem:** Missing product identifier keys threatened to drop transactional entries out of the model entirely.
 *   **Solution:** Built a conditional logic formula to isolate blank cells and assign them to a structured placeholder flag:
- =IF(ISBLANK(B2), "UNKNOWN_PROD", B2)   
+
+=IF(ISBLANK(B2), "UNKNOWN_PROD", B2)   
 
 ### C. Eliminating Duplicate Records
 *   **Problem:** Repeated primary identifier records broke the unique constraints required for database lookups.
@@ -81,7 +82,9 @@ A 1-to-Many (`1:*`) active data relationship map was established, drawing connec
 
 ### B. Cross-Table Advanced DAX Calculation
 To calculate our true monetary yields on a dynamic, row-by-row transactional matrix level, I authored a cross-table **DAX Measure** inside the model:
+
 Total Revenue := SUMX(Sales_Fact, Sales_Fact[Qty_Order] * RELATED(Production_Dim[Unit price]))`
+
 *   *Why this works:* `SUMX` forces an iterative, row-by-row transaction calculation, while `RELATED` pulls the unit catalog pricing from the dimension table instantly for each matching item ID.
 
 ---
