@@ -1,10 +1,10 @@
-# 🛍️ Retail Sales Data Analysis Using Excel
+# Retail Sales Data Analysis Using Excel
 ## Revenue By Customer, Revenue By Category & Revenue By Region Analysis
-### 📊 Consumer Electronics Retail – Synthetic Electronics Dataset (2026)
+### Consumer Electronics Retail – Synthetic Electronics Dataset (2026)
 
 ---
 
-## 📋 Table of Contents
+## Table of Contents
 1. [Project Overview](#1-project-overview)
 2. [Dataset Overview](#2-dataset-overview)
 3. [Data Quality Assessment](#3-data-quality-assessment)
@@ -28,10 +28,10 @@ By bypassing system-slowing grid lookups and implementing a structured **Star Sc
 
 ## 2. Dataset Overview
 The relational database utilized for this analysis mimics an enterprise electronics retail environment, consisting of 4 distinct tables:
-*   📊 **`Sales_Fact`**: Transactional logs tracking item quantities, order IDs, store locations, and sale timelines.
-*   👤 **`Customers_Dim`**: Master customer database capturing unique buyer IDs, names, and contact registration data.
-*   📦 **`Production_Dim`**: Product inventory definitions mapping item category tiers to standard unit catalog prices.
-*   🏢 **`Stores_Dim`**: Operational facility directory mapping regional location codes to physical storefronts.
+*   **`Sales_Fact`**: Transactional logs tracking item quantities, order IDs, store locations, and sale timelines.
+*   **`Customers_Dim`**: Master customer database capturing unique buyer IDs, names, and contact registration data.
+*   **`Production_Dim`**: Product inventory definitions mapping item category tiers to standard unit catalog prices.
+*   **`Stores_Dim`**: Operational facility directory mapping regional location codes to physical storefronts.
 
 ---
 
@@ -76,9 +76,9 @@ Rather than relying on heavy cell calculations like `VLOOKUP` or `XLOOKUP` which
 
 ### A. The Relational Plumbing
 A 1-to-Many (`1:*`) active data relationship map was established, drawing connection lines from the central transaction table up to the master descriptive lookups:
-*   `Customers_Dim[CustomerID]` ➡️ Connected to ➡️ `Sales_Fact[CustomerID]`
-*   `Production_Dim[ProductID]` ➡️ Connected to ➡️ `Sales_Fact[ProductID]`
-*   `Stores_Dim[StoreID]` ➡️ Connected to ➡️ `Sales_Fact[StoreID]`
+*   `Customers_Dim[CustomerID]` Connected to `Sales_Fact[CustomerID]`
+*   `Production_Dim[ProductID]` Connected to `Sales_Fact[ProductID]`
+*   `Stores_Dim[StoreID]` Connected to `Sales_Fact[StoreID]`
 
 ### B. Cross-Table Advanced DAX Calculation
 To calculate our true monetary yields on a dynamic, row-by-row transactional matrix level, I authored a cross-table **DAX Measure** inside the model:
@@ -107,9 +107,9 @@ To evaluate sales channel strengths, transactional volumes were aggregated acros
 ---
 
 ## 9. Key Findings & Insights
-*   🥇 **The Regional Engine:** The **South Region** serves as our primary market engine, generating a commanding **\$7,379.07** in gross performance. Conversely, the **East Region** represents our weakest market block at **\$5,626.13**, revealing an immediate 24% performance lag.
-*   📦 **Product Asset Discrepancies:** Exceptional asset efficiency was uncovered within the **Audio** catalog, securing a top-tier **\$3,630.00** in total revenue on just **46 units sold**. Meanwhile, low-margin **Accessories** required high transaction volume (**14 units**) yet returned a minimal **\$368.86**.
-*   ⚠️ **The System Vulnerability Leak:** A massive data logging deficit was exposed inside our transactional registry, uncovering **\$1,133.41 in untracked sales** tied back to a ghost placeholder profile (`CUST-9999`) that completely lacks customer records. 
+*   **The Regional Engine:** The South Region serves as our primary market engine, generating a commanding **\$7,379.07** in gross performance. Conversely, the East Region represents our weakest market block at **\$5,626.13**, revealing an immediate 24% performance lag.
+*   **Product Asset Discrepancies:** Exceptional asset efficiency was uncovered within the Audio catalog, securing a top-tier **\$3,630.00** in total revenue on just **46 units sold**. Meanwhile, low-margin Accessories required high transaction volume (**14 units**) yet returned a minimal **\$368.86**.
+*   **The System Vulnerability Leak:** A massive data logging deficit was exposed inside our transactional registry, uncovering **\$1,133.41 in untracked sales** tied back to a ghost placeholder profile (`CUST-9999`) that completely lacks customer records. 
 
 ---
 
