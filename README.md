@@ -1,10 +1,11 @@
 # Retail Sales Data Analysis Using Excel
-## Revenue By Customer, Revenue By Category & Revenue By Region Analysis
-### Consumer Electronics Retail – Synthetic Electronics Dataset (2026)
+
+## Revenue by Customer, Revenue by Category, and Revenue by Region Analysis
 
 ---
 
 ## Table of Contents
+
 1. [Project Overview](#1-project-overview)
 2. [Dataset Overview](#2-dataset-overview)
 3. [Data Quality Assessment](#3-data-quality-assessment)
@@ -19,107 +20,133 @@
 
 ---
 
-## 1. Project Overview
-In modern retail environments, data is frequently captured across scattered systems, resulting in broken entries, duplicates, and calculation mismatches. The primary goal of this business intelligence project was to take a deeply corrupted, multi-table retail transactional database and transform it into a centralized, high-performance analytical application natively inside Microsoft Excel.
+## 1 Project Overview
 
-By bypassing system-slowing grid lookups and implementing a structured **Star Schema Data Model (Power Pivot)**, this project builds a self-service dashboard that allows executive leadership to explore revenue drivers dynamically while ensuring 100% data integrity.
+Retail data rarely arrives ready to analyze. It usually shows up scattered across separate tables, full of broken entries, duplicate records, and numbers stored as text. This project takes exactly that kind of raw, multi-table retail database and turns it into a working analytical model, built entirely inside Microsoft Excel using Power Pivot.
 
----
-
-## 2. Dataset Overview
-The relational database utilized for this analysis mimics an enterprise electronics retail environment, consisting of 4 distinct tables:
-*   **`Sales_Fact`**: Transactional logs tracking item quantities, order IDs, store locations, and sale timelines.
-*   **`Customers_Dim`**: Master customer database capturing unique buyer IDs, names, and contact registration data.
-*   **`Production_Dim`**: Product inventory definitions mapping item category tiers to standard unit catalog prices.
-*   **`Stores_Dim`**: Operational facility directory mapping regional location codes to physical storefronts.
+Rather than relying on slow, sprawling lookup formulas, the cleaned tables were loaded into a proper star schema data model. The result is a dashboard that lets anyone explore revenue by customer, category, or region on demand, backed by data that has actually been checked and corrected first.
 
 ---
 
-## 3. Data Quality Assessment
-Before modeling, an extensive audit was performed on the raw tables, exposing critical data vulnerabilities that would heavily distort corporate financial reporting if left unaddressed:
-*   **Structural Entry Failures:** The transactional fact table contained significant data gaps, including empty product ID rows and mixed text configurations inside the primary date parameters.
-*   **Text Formatting Inconsistencies:** Text fields across the customer and product files suffered from erratic casing structures, leading to split groupings (e.g., separating "Audio", "audio", and "ELECTRONICS" into distinct entities).
-*   **Primary Key Violations:** The master customer registry contained duplicate primary identifier records, compromising relational database logic.
-*   **Financial Integrity Risks:** Retail price columns were contaminated with embedded text currency flags, rendering them mathematically uncalculable by Excel's standard numerical engine.
+## 2 Dataset Overview
+
+The model is built on four related tables, structured the way a retail data warehouse typically is.
+
+| Table | What It Holds |
+| --- | --- |
+| `Sales_Fact` | Transaction line items, order IDs, store locations, and sale dates |
+| `Customers_Dim` | Customer IDs, names, and contact details |
+| `Product_Dim` | Product IDs, category, and unit price |
+| `Stores_Dim` | Store IDs mapped to region and location |
+
+`Sales_Fact` sits at the center as the transactional record; the other three describe who bought, what was bought, and where.
 
 ---
 
-## 4. Data Cleaning & Error Correction
-To restore complete structural database integrity, the following programmatic Excel cell formulas were applied directly across the grids:
+## 3 Data Quality Assessment
 
-### A. Normalizing Text Casing and Trimming Spaces
-*   **Problem:** Erratic case entries and hidden text padding spaces generated fragmented categorical splits.
-*   **Solution:** Unified text casing and stripped out invisible trailing space breaks simultaneously using nested string configurations:
+Before any modeling began, the raw tables were audited and several issues stood out clearly enough to distort any report built on top of them.
 
- =PROPER(TRIM(A2))
+- **Structural gaps in the transaction log:** `Sales_Fact` contained blank product ID rows and a mix of inconsistent date formats.
+- **Inconsistent text casing:** Category and name fields mixed cases freely, so "Audio", "audio", and "ELECTRONICS" were being treated as separate values instead of one.
+- **Duplicate customer records:** The customer table contained repeated primary identifiers, breaking the one-to-many relationship a clean model depends on.
+- **Prices stored as text:** Unit price values had currency symbols embedded in them, which made the column unusable for any calculation until it was cleaned.
+
+---
+
+## 4 Data Cleaning & Error Correction
+
+Each issue above was resolved with a targeted formula or Excel tool, applied directly across the affected columns.
+
+### A. Normalizing Case and Trimming Spaces
+
+Erratic casing and hidden trailing spaces were both fixed in a single formula, restoring one consistent category value where there used to be several.
+
+```excel
+=PROPER(TRIM(A2))
+```
 
 ### B. Patching Blank Product Mappings
-*   **Problem:** Missing product identifier keys threatened to drop transactional entries out of the model entirely.
-*   **Solution:** Built a conditional logic formula to isolate blank cells and assign them to a structured placeholder flag:
 
-=IF(ISBLANK(B2), "UNKNOWN_PROD", B2)   
+Blank product ID cells were replaced with an explicit placeholder rather than left empty, so no transaction silently dropped out of the model during a lookup.
 
-### C. Eliminating Duplicate Records
-*   **Problem:** Repeated primary identifier records broke the unique constraints required for database lookups.
-*   **Solution:** Deployed advanced filtering criteria rules via Excel's data extraction tool to isolate unique values, successfully stripping out redundant identifier rows.
+```excel
+=IF(ISBLANK(B2), "UNKNOWN_PROD", B2)
+```
 
-### D. Formatting Financial Decimals
-*   **Problem:** Text currency flags forced values to render as text fields, freezing all mathematical summary options.
-*   **Solution:** Executed regular expression cleaning routines to strip out raw text symbols, converting the output columns into pure, clean numeric decimal fields formatted to two decimal points.
+### C. Removing Duplicate Records
 
----
+Excel's built-in duplicate removal tool was run against the customer table's primary identifier column, stripping out repeated rows and restoring the unique keys the relational model depends on.
 
-## 5. Feature Engineering & Relational Modeling
-Rather than relying on heavy cell calculations like `VLOOKUP` or `XLOOKUP` which slow down workbook speeds, the cleaned tables were loaded directly into **Excel Power Pivot** to build a high-performance **Star Schema Relational Model**.
+### D. Converting Prices to Real Numbers
 
-### A. The Relational Plumbing
-A 1-to-Many (`1:*`) active data relationship map was established, drawing connection lines from the central transaction table up to the master descriptive lookups:
-*   `Customers_Dim[CustomerID]` Connected to `Sales_Fact[CustomerID]`
-*   `Production_Dim[ProductID]` Connected to `Sales_Fact[ProductID]`
-*   `Stores_Dim[StoreID]` Connected to `Sales_Fact[StoreID]`
-
-*   <img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/780dc13f-ff5d-48db-b7da-d40379b158a5" />
-
-
-### B. Cross-Table Advanced DAX Calculation
-To calculate our true monetary yields on a dynamic, row-by-row transactional matrix level, I authored a cross-table **DAX Measure** inside the model:
-
-Total Revenue := SUMX(Sales_Fact, Sales_Fact[Qty_Order] * RELATED(Product_Dim[Unit price]))`
-
-*   *Why this works:* `SUMX` forces an iterative, row-by-row transaction calculation, while `RELATED` pulls the unit catalog pricing from the dimension table instantly for each matching item ID.
+Currency symbols embedded in the price column were stripped out using text-cleaning formulas, converting the column from text into proper two-decimal numeric values that Excel could actually sum and average.
 
 ---
 
-## 6. Revenue By Customer Analysis
-By mapping our custom `Total Revenue` measure against our master buyer records, the system generated an automated executive buyer leaderboard. This analysis effectively isolates customer valuation concentrations, highlighting our top 10 highest-value purchasers while filtering historical timelines to analyze true account value over time.
+## 5 Feature Engineering
+
+With clean tables in hand, the next step was connecting them properly and building the one measure the entire analysis depends on, total revenue.
+
+### A. Building the Relational Model
+
+The four tables were connected in Power Pivot using one-to-many relationships, with the dimension tables feeding into the central `Sales_Fact` table.
+
+- `Customers_Dim[CustomerID]` to `Sales_Fact[CustomerID]`
+- `Product_Dim[ProductID]` to `Sales_Fact[ProductID]`
+- `Stores_Dim[StoreID]` to `Sales_Fact[StoreID]`
+
+![Power Pivot data model diagram showing Sales_Fact connected to Customers_Dim, Product_Dim, and Stores_Dim](https://github.com/user-attachments/assets/780dc13f-ff5d-48db-b7da-d40379b158a5)
+
+### B. The Total Revenue Measure
+
+With the relationships in place, a single DAX measure calculates revenue row by row across every transaction, pulling the matching unit price in from the product table for each item sold.
+
+```dax
+Total Revenue = SUMX(Sales_Fact, Sales_Fact[Qty_Order] * RELATED(Product_Dim[Unit_Price]))
+```
+
+`SUMX` iterates through every row in `Sales_Fact` individually, and `RELATED` reaches across the relationship to pull in the correct unit price for that row's product, so the measure stays accurate even as new transactions are added.
 
 ---
 
-## 7. Revenue By Category Analysis
-Product catalog margins were audited by contrasting unit sales volumes directly against gross profitability returns. This evaluation exposed a significant variance in resource performance:
-*   **High-Velocity Yields:** Premium inventory groups (such as **Audio**) generate immense financial yields while maintaining a tiny, highly efficient inventory footprint.
-*   **Low-Velocity Drag:** Cheap accessory components demand significant inventory throughput but return negligible dollar values to the company ledger.
+## 6 Revenue By Customer Analysis
+
+Plotting the Total Revenue measure against the customer table produces an automatic buyer leaderboard, ranking customers from highest to lowest lifetime spend. Filtering by date range on top of that shows how an individual customer's value has actually changed over time, rather than just their all-time total.
 
 ---
 
-## 8. Revenue By Region Analysis
-To evaluate sales channel strengths, transactional volumes were aggregated across geographic store parameters. Integrating interactive **Timeline Slicers** allows users to filter the entire model instantly, showing how regional cash generation changes between operational months.
+## 7 Revenue By Category Analysis
+
+Comparing units sold against revenue generated by category exposed a clear split in how efficiently different product lines perform.
+
+- **High-efficiency categories:** Audio products generated strong revenue from a relatively small number of units sold, a sign of high per-unit value.
+- **Low-efficiency categories:** Accessories required a much higher unit volume to generate a comparatively small amount of revenue.
 
 ---
 
-## 9. Key Findings & Insights
-*   **The Regional Engine:** The South Region serves as our primary market engine, generating a commanding **\$7,379.07** in gross performance. Conversely, the East Region represents our weakest market block at **\$5,626.13**, revealing an immediate 24% performance lag.
-*   **Product Asset Discrepancies:** Exceptional asset efficiency was uncovered within the Audio catalog, securing a top-tier **\$3,630.00** in total revenue on just **46 units sold**. Meanwhile, low-margin Accessories required high transaction volume (**14 units**) yet returned a minimal **\$368.86**.
-*   **The System Vulnerability Leak:** A massive data logging deficit was exposed inside our transactional registry, uncovering **\$1,133.41 in untracked sales** tied back to a ghost placeholder profile (`CUST-9999`) that completely lacks customer records. 
+## 8 Revenue By Region Analysis
+
+Transactions were aggregated by store region to compare geographic performance directly. A timeline slicer was added on top, letting anyone filter the entire report by month and see how each region's revenue shifts over time, rather than looking at one static total.
 
 ---
 
-## 10. Recommendations
-1.  **Synchronize Regional Strategies:** Extract the exact local marketing and sales playbooks currently driving performance in our high-yielding **South Region** and implement them across underperforming **East Region** operations.
-2.  **Optimize Catalog Sourcing:** Reallocate seasonal procurement capital away from low-velocity accessory items and heavily scale investment into high-margin **Audio** components.
-3.  **Enforce POS Database Hard Locks:** Update software validation protocols at all point-of-sale cash registers to automatically reject transaction processing whenever customer mapping fields fail to validate against active customer directories, permanently stopping the `CUST-9999` ghost leak.
+## 9 Key Findings & Insights
+
+- **The South region is the strongest market.** It generated 7,379.07 dollars in gross revenue, compared to 5,626.13 dollars in the East, the weakest region, a gap of roughly 24 percent between the two.
+- **Audio is the standout category by efficiency.** It brought in 3,630 dollars in total revenue from just 46 units sold. Accessories, by contrast, needed 14 units to generate only 368.86 dollars, a far weaker return per unit.
+- **A ghost customer profile is hiding untracked revenue.** 1,133.41 dollars in sales are tied to a placeholder customer ID, `CUST-9999`, that has no matching record in the customer table at all, meaning that revenue currently has no real buyer attached to it in the model.
 
 ---
 
-## 11. Conclusion
-This project demonstrates the power of shifting Excel from a standard spreadsheet tool into a true enterprise data modeling engine. By taking a corrupted, fragmented database, cleaning it using precise functional cell overrides, and architecting an optimized Power Pivot Star Schema, this build delivers a robust business intelligence tool. The application successfully surfaces data integrity vulnerabilities while giving corporate executives the dynamic visibility required to optimize sales velocity and protect revenue margins.
+## 10 Recommendations
+
+1. **Study and replicate what's working in the South.** Whatever is driving the South region's stronger performance is worth documenting and testing in the East before assuming the gap is unfixable.
+2. **Shift procurement toward higher-efficiency categories.** Audio's strong revenue-to-volume ratio makes it a better candidate for expanded inventory investment than low-margin accessories.
+3. **Close the CUST-9999 gap at the point of sale.** Add validation at checkout so a transaction can't be recorded without a real, matching customer ID, preventing this kind of untracked revenue from recurring.
+
+---
+
+## 11 Conclusion
+
+This project shows what a spreadsheet can do once it's treated like a real data model rather than a flat grid. Cleaning the raw tables, correcting the formatting issues that were fragmenting categories and breaking calculations, and connecting everything through a proper star schema turned a messy export into a dashboard that actually answers questions, and surfaced a genuine revenue leak in the process.
