@@ -87,7 +87,7 @@ Star schema with `Sales_Fact` at the center and three one-to-many relationships:
 
 <img width="959" height="503" alt="Power Pivot diagram view showing Sales_Fact connected to Customers_Dim, Product_Dim and Stores_Dim" src="https://github.com/user-attachments/assets/780dc13f-ff5d-48db-b7da-d40379b158a5" />
 
-## Business Objective
+## 7. Business Objective
 
 **Revenue By Customer Analysis**
 
