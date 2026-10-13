@@ -20,7 +20,7 @@ Cleaned a corrupted four-table retail database and rebuilt it as an interactive 
 5. [Feature Engineering and DAX](#5-feature-engineering-and-dax)
 6. [Data Modeling](#6-data-modeling)
 7. [Business_Objectives](#7-business_objective)
-8. [Key Findings](#8-key-findings)
+8. [Key Findings_and Insights](#8-key-findings_and_insights)
 9. [Recommendations](#9-recommendations)
 10. [Conclusion](#10-conclusion)
 
@@ -87,7 +87,7 @@ Star schema with `Sales_Fact` at the center and three one-to-many relationships:
 
 <img width="959" height="503" alt="Power Pivot diagram view showing Sales_Fact connected to Customers_Dim, Product_Dim and Stores_Dim" src="https://github.com/user-attachments/assets/780dc13f-ff5d-48db-b7da-d40379b158a5" />
 
-## 7. Business Objective
+## 7. Business Objectives
 
 **Revenue By Customer Analysis**
 
