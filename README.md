@@ -1,4 +1,4 @@
-# Retail Sales Analytics Using Excel
+# Retail Sales Analytics in Excel
 
 **Power Pivot star schema | DAX | Revenue analysis by customer, category and region**
 
@@ -101,7 +101,7 @@ Star schema with `Sales_Fact` at the center and three one-to-many relationships:
 
 Revenue totals $27,189.91 on 359 units sold. Jane Smith is the top customer at $4,741, and Furniture is the top category at $8,000.
 
-## 8. Key Findings & Insights 
+## 8. Key Findings
 
 | Finding | Detail |
 |---|---|
