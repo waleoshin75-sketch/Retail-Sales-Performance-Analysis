@@ -97,7 +97,7 @@ Star schema with `Sales_Fact` at the center and three one-to-many relationships:
 
 ### Dashboard Preview
 
-<img src="images/retail-sales-dashboard.png" alt="Retail Sales Performance Analysis Excel dashboard with revenue by customer, category and region" width="100%">
+<img width="2400" height="1028" alt="retail-sales-dashboard (2)" src="https://github.com/user-attachments/assets/b7280945-6eb7-4a13-b4dc-a69eaffe0e3c" />
 
 Revenue totals $27,189.91 on 359 units sold. Jane Smith is the top customer at $4,741, and Furniture is the top category at $8,000.
 
